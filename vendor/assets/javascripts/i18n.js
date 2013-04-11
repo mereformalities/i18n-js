@@ -65,7 +65,7 @@ I18n.fallbackRules = {
 
 I18n.pluralizationRules = {
   en: function (n) {
-    return n == 0 ? ["zero", "none", "other"] : n == 1 ? "one" : "other";
+    return n === 0 ? ["zero", "none", "other"] : n === 1 ? "one" : "other";
   }
 };
 
