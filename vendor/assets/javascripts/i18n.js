@@ -145,6 +145,7 @@ I18n.lookup = function(scope, options) {
 I18n.prepareOptions = function() {
   var options = {}
     , opts
+    , key
     , count = arguments.length
   ;
 
@@ -155,7 +156,7 @@ I18n.prepareOptions = function() {
       continue;
     }
 
-    for (var key in opts) {
+    for (key in opts) {
       if (!this.isValidNode(options, key)) {
         options[key] = opts[key];
       }
@@ -171,6 +172,7 @@ I18n.interpolate = function(message, options) {
     , placeholder
     , value
     , name
+    , regex
   ;
 
   if (!matches) {
@@ -469,12 +471,13 @@ I18n.toPercentage = function(number, options) {
 };
 
 I18n.pluralizer = function(locale) {
-  pluralizer = this.pluralizationRules[locale];
+  var pluralizer = this.pluralizationRules[locale];
   if (pluralizer !== undefined) return pluralizer;
   return this.pluralizationRules["en"];
 };
 
 I18n.findAndTranslateValidNode = function(keys, translation) {
+  var i, key;
   for (i = 0; i < keys.length; i++) {
     key = keys[i];
     if (this.isValidNode(translation, key)) return translation[key];
@@ -483,7 +486,12 @@ I18n.findAndTranslateValidNode = function(keys, translation) {
 };
 
 I18n.pluralize = function(count, scope, options) {
-  var translation;
+  var translation
+    , message
+    , pluralizer
+    , keys
+    , key
+  ;
 
   try {
     translation = this.lookup(scope, options);
@@ -493,7 +501,6 @@ I18n.pluralize = function(count, scope, options) {
     return this.missingTranslation(scope);
   }
 
-  var message;
   options = this.prepareOptions(options);
   options.count = count.toString();
 
